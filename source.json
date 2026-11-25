@@ -1,0 +1,79 @@
+{
+  "name": "LINKPASS Source",
+  "identifier": "com.linkpass.source",
+  "subtitle": "LinkPass 应用侧载源",
+  "description": "Kazumi、CarCanvas、AirBeep 等应用的 AltStore / SideStore / Feather 软件源。",
+  "iconURL": "https://linkpass888.github.io/Sideload/assets/source.png",
+  "headerURL": "https://linkpass888.github.io/Sideload/assets/header.png",
+  "sourceURL": "https://linkpass888.github.io/Sideload/source.json",
+  "website": "https://linkpass888.github.io/Sideload/",
+  "tintColor": "#5B8DEF",
+  "featuredApps": [
+    "com.linkpass.kazumi",
+    "com.carcanvas.wq",
+    "com.linkpass888.airbeep"
+  ],
+  "apps": [
+    {
+      "name": "Kazumi",
+      "bundleIdentifier": "com.linkpass.kazumi",
+      "developerName": "LinkPass",
+      "subtitle": "番剧采集与在线观看",
+      "localizedDescription": "基于自定义规则的番剧采集与在线观看客户端，带弹幕。原生 SwiftUI 实现，界面使用 iOS 26 的液态玻璃材质，随系统外观与辅助功能设置变化。",
+      "iconURL": "https://linkpass888.github.io/Sideload/assets/apps/kazumi.png",
+      "tintColor": "#3FBFA8",
+      "category": "entertainment",
+      "versions": [
+        {
+          "version": "3.1.3",
+          "date": "2026-11-25T02:28:50Z",
+          "downloadURL": "https://github.com/LinkPass888/Kazumi-Swift/releases/download/v3.1.3/Kazumi_ios_v3.1.3_no_sign.ipa",
+          "size": 21572090,
+          "sha256": "74f8eb4dbd59f9214c68b9d4bed8f487f8abfa991e04c3d137fec62633181d2f",
+          "localizedDescription": "### 修复\n\n- 修复点全屏后画面有时缩到左下角并越出边界、必须退出再进一次才恢复的问题\n- 修复在 Bangumi 上标记单集看过失败时只说一句「失败」、看不出原因的问题，现在会说明是令牌失效、单集不存在还是番剧未收藏\n- 修复时间表滑到底后大量过滤或切换排序时整页空白的问题\n- 修复番剧详情页的验证码弹窗在大字号或横屏下撑满整屏的问题，现在限制在半屏高度、内容可滚动\n- 修复截图偶发失败：`screenshot-raw` 取不到帧时先在 GPU 侧按片源分辨率读回，不再为此切换解码器\n\n### 优化\n\n- 横屏播放页的进度条改用独立布局，与时间显示对齐更整齐\n- 弹幕：屏蔽规则预编译复用、轨道判定提速，无弹幕时段降低刷新频率，高密度弹幕下更省电\n- 追番页只按需加载可视区封面，之后 15 张提前预取，滚动更顺\n- 下载重试改为 0.5 秒 → 1.5 秒 → 3 秒的退避；App 被强杀后重开也能按已下载的分片恢复进度\n- 云同步内容没有变化时不再重复上传，上传过程中的提示会分阶段显示进度\n- 更新提醒的封面改为复用同一张图，不再为每条提醒重复准备\n- 图片搜索选图后改为后台压缩再上传，选择大图时不再卡顿\n- 日志缓冲改为固定容量的环形结构，长时间使用后内存占用更稳定\n\n### 已知问题\n\n- 部分番剧的详情页侧滑退出无法打断，按钮悬空慢淡出。这是 SwiftUI 原生转场机制的限制，暂时没有优化计划"
+        }
+      ]
+    },
+    {
+      "name": "CarCanvas",
+      "bundleIdentifier": "com.carcanvas.wq",
+      "developerName": "LinkPass",
+      "subtitle": "自定义 CarPlay 壁纸",
+      "localizedDescription": "用自己的照片替换 CarPlay 壁纸，支持原始缓存备份与恢复。需要 iOS 26.0–26.7.2 或 27.0–27.2.1，签名时须保留 App Group（SideStore、AltStore、Impactor 均可）。",
+      "iconURL": "https://linkpass888.github.io/Sideload/assets/apps/carcanvas.png",
+      "tintColor": "#5B8DEF",
+      "category": "utilities",
+      "versions": [
+        {
+          "version": "2.1.2",
+          "date": "2026-11-18T07:06:55Z",
+          "downloadURL": "https://github.com/LinkPass888/CarCanvas/releases/download/v2.1.2/CarCanvas-v2.1.2-unsigned.ipa",
+          "size": 1036546,
+          "sha256": "b49b6e26ec77453fba3b249116b66f3bd9cafdcbc60fc214420ade688a17c6af",
+          "localizedDescription": "### 简体中文\n\n#### 变更\n- **高对比自适应裁切框。** 重新设计裁切框，加入双色高对比边框、四角加粗角标与三分法九宫格参考线，画布底台与框外 50% 半透明遮罩跟随系统浅色／深色模式自适应，在纯白、纯黑及复杂图案壁纸上均清晰可见，同时高亮当前匹配的尺寸／比例按钮。\n- **优化裁切拖动跟手度。** 裁切蒙版静态缓存免重绘，并将拖动手势起始阈值降至 1pt，消除起手顿挫感。\n- **发版安装包附带版本号。** 构建并发布的未签名安装包文件名改为 `CarCanvas-v<版本号>-unsigned.ipa`（如 `CarCanvas-v2.1.2-unsigned.ipa`）。\n\n### English\n\n#### Changed\n- **High-contrast adaptive crop frame.** Redesigned the crop overlay with dual-contrast borders, bold corner brackets and rule-of-thirds guides over an adaptive light/dark stage and 50% outer scrim, staying legible across pure white, pure black and busy wallpapers while highlighting the active size or ratio preset.\n- **Smoother crop dragging.** Cached the static crop overlay during gestures and lowered the drag activation threshold to 1pt to eliminate initial stutter.\n- **Versioned release IPA filename.** Packaged unsigned IPA artifacts now include the version string (`CarCanvas-v<version>-unsigned.ipa`, e.g. `CarCanvas-v2.1.2-unsigned.ipa`).\n\n### 日本語\n\n#### 変更\n- **高コントラストな自動適応トリミング枠。** 二重コントラストの枠線、四隅の太線コーナー、三分割グリッドを追加し、背景と枠外の 50% 半透明マスクをシステムのライト／ダークモードに合わせて自動切り替え。白一色・黒一色・複雑な柄の壁紙でも見やすくし、選択中のサイズ／比率ボタンを強調表示します。\n- **ドラッグ操作の滑らかさを改善。** トリミングオーバーレイの再描画を抑え、ドラッグ開始のしきい値を 1pt に下げることで動かし始めの引っかかりを解消しました。\n- **リリース IPA ファイル名にバージョンを付与。** 未署名 IPA のファイル名を `CarCanvas-v<バージョン>-unsigned.ipa`（例：`CarCanvas-v2.1.2-unsigned.ipa`）に変更しました。"
+        }
+      ]
+    },
+    {
+      "name": "AirBeep",
+      "bundleIdentifier": "com.linkpass888.airbeep",
+      "developerName": "LinkPass",
+      "subtitle": "静音通话录音提示音",
+      "localizedDescription": "先备份原始提示音，再把通话录音的开始与结束提示音替换为等长静音，随时可从备份恢复原音。支持 iOS 18.0 以上。",
+      "iconURL": "https://linkpass888.github.io/Sideload/assets/apps/airbeep.png",
+      "tintColor": "#FF9F43",
+      "category": "utilities",
+      "versions": [
+        {
+          "version": "2.5.2",
+          "date": "2026-10-19T11:35:11Z",
+          "downloadURL": "https://github.com/LinkPass888/AirBeep/releases/download/v2.5.2/airbeep-v2.5.2-unsigned.ipa",
+          "size": 5880046,
+          "sha256": "c7eff1f8613535d4ac04caa40241add4c0acd59190a134d024788531ee97afe9",
+          "localizedDescription": "## [2.5.2] - 2026-10-19\r\n\r\n### English / Added\r\n- **Check tone status button.** The current tone state can now be checked on\r\n  demand from the home screen. The read channel is unreliable on some iOS\r\n  releases (the AirTraffic move step never completes there), so the check\r\n  reports one of three outcomes: silenced, originals still in place, or\r\n  unverifiable on this device. It never runs automatically and never gates an\r\n  operation.\r\n\r\n### English / Changed\r\n- After silencing, the success alert no longer claims a verified result when\r\n  the read-back could not confirm it; it says the silence was written but\r\n  unverified and points at the tone status check. This covers the\r\n  [issue #6](https://github.com/LinkPass888/AirBeep/issues/6) report where the\r\n  write channel returns success on iOS 27.x while the tones never change.\r\n\r\n---\r\n\r\n### 中文 / 新增\r\n- **校验提示音状态按钮。** 可在首页按需检测当前提示音状态。部分 iOS 版本上\r\n  读取通道不可靠（AirTraffic 搬运步骤始终无法完成），因此检测结果分为三种：\r\n  已静音、原始提示音仍在、本机无法校验。该检测绝不自动运行，也不会阻断\r\n  任何操作。\r\n\r\n### 中文 / 变更\r\n- 静音后的成功弹窗在回读校验无法确认时不再直接宣称成功，改为提示\"静音\r\n  已写入、结果未经校验\"，并引导使用提示音状态校验。对应\r\n  [issue #6](https://github.com/LinkPass888/AirBeep/issues/6) 反馈的\r\n  iOS 27.x 上写入通道返回成功但提示音实际未变的问题。\r\n\r\n**Full Changelog**: https://github.com/LinkPass888/AirBeep/compare/v2.5.1...v2.5.2"
+        }
+      ]
+    }
+  ],
+  "news": []
+}

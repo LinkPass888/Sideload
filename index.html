@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>LinkPass Source</title>
+    <meta name="description" content="Kazumi、CarCanvas、AirBeep 的 AltStore / SideStore / Feather 侧载源。" />
+    <meta name="theme-color" content="#08090c" />
+    <meta name="color-scheme" content="dark" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="LinkPass Source" />
+    <meta property="og:description" content="Kazumi、CarCanvas、AirBeep 的 AltStore / SideStore / Feather 侧载源。" />
+    <meta property="og:image" content="assets/header.png" />
+    <link rel="icon" href="assets/source.png" />
+    <link rel="apple-touch-icon" href="assets/source.png" />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #08090c;
+        --fg: #f5f6f8;
+        --muted: rgb(245 246 248 / 0.58);
+        --faint: rgb(245 246 248 / 0.36);
+        --line: rgb(255 255 255 / 0.09);
+        --card: rgb(255 255 255 / 0.035);
+        --radius: 18px;
+        --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter",
+          "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+      }
+      * { box-sizing: border-box; }
+      html { background: var(--bg); -webkit-text-size-adjust: 100%; }
+      body {
+        margin: 0;
+        color: var(--fg);
+        font-family: var(--sans);
+        line-height: 1.55;
+        background:
+          radial-gradient(820px 460px at 18% -8%, rgb(91 141 239 / 0.20), transparent 68%),
+          radial-gradient(720px 420px at 88% 4%, rgb(63 191 168 / 0.14), transparent 70%),
+          var(--bg);
+        background-repeat: no-repeat;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap { width: min(940px, 100% - 40px); margin: 0 auto; padding: 56px 0 72px; }
+      a { color: inherit; text-decoration: none; }
+      header { display: flex; align-items: center; gap: 14px; margin-bottom: 40px; }
+      header img { width: 46px; height: 46px; border-radius: 12px; }
+      .brand { font-size: 15px; font-weight: 600; letter-spacing: 0.02em; }
+      .brand span { display: block; font-size: 12px; font-weight: 400; color: var(--faint); letter-spacing: 0.06em; text-transform: uppercase; }
+      h1 { margin: 0 0 14px; font-size: clamp(32px, 6.2vw, 50px); line-height: 1.12; letter-spacing: -0.025em; font-weight: 700; }
+      .lede { margin: 0 0 32px; max-width: 34em; color: var(--muted); font-size: 16px; }
+      .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+      .btn {
+        --accent: #5b8def;
+        display: inline-flex; align-items: center; gap: 9px;
+        padding: 12px 18px; border-radius: 12px;
+        background: var(--card); border: 1px solid var(--line);
+        font-size: 14px; font-weight: 550; cursor: pointer;
+        transition: transform 0.16s ease, background 0.16s ease, border-color 0.16s ease;
+      }
+      .btn:hover { background: rgb(255 255 255 / 0.075); border-color: rgb(255 255 255 / 0.16); transform: translateY(-1px); }
+      .btn:active { transform: translateY(0); }
+      .btn.primary { background: var(--accent); border-color: transparent; color: #06080b; font-weight: 650; }
+      .btn.primary:hover { filter: brightness(1.08); background: var(--accent); }
+      .btn .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--accent); }
+      .btn.primary .dot { background: rgb(0 0 0 / 0.45); }
+      .manual {
+        display: flex; gap: 10px; align-items: center; margin-bottom: 44px;
+        padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px;
+        background: var(--card); font-family: var(--mono); font-size: 13px; color: var(--muted);
+        overflow-x: auto; white-space: nowrap;
+      }
+      .manual code { flex: 1; color: var(--fg); }
+      .manual button {
+        flex: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer;
+        background: rgb(255 255 255 / 0.08); border: 1px solid var(--line); color: var(--fg);
+        font-family: var(--sans);
+      }
+      .manual button:hover { background: rgb(255 255 255 / 0.14); }
+      h2 { margin: 0 0 6px; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); }
+      .apps { display: grid; gap: 12px; }
+      .app {
+        display: grid; grid-template-columns: 64px 1fr auto; gap: 16px; align-items: center;
+        padding: 16px; border: 1px solid var(--line); border-radius: var(--radius);
+        background: var(--card); transition: border-color 0.16s ease, background 0.16s ease;
+      }
+      .app:hover { border-color: rgb(255 255 255 / 0.18); background: rgb(255 255 255 / 0.055); }
+      .app img.icon { width: 64px; height: 64px; border-radius: 15px; background: #fff; }
+      .app h3 { margin: 0 0 2px; font-size: 17px; font-weight: 650; letter-spacing: -0.01em; }
+      .app .sub { margin: 0; font-size: 13.5px; color: var(--muted); }
+      .app .meta { margin: 6px 0 0; font-size: 12px; color: var(--faint); font-family: var(--mono); }
+      .download {
+        padding: 9px 16px; border-radius: 999px; font-size: 13px; font-weight: 600;
+        background: rgb(255 255 255 / 0.09); border: 1px solid var(--line); white-space: nowrap;
+      }
+      .download:hover { background: rgb(255 255 255 / 0.16); }
+      .empty { font-size: 13.5px; color: var(--faint); }
+      footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--line); font-size: 13px; color: var(--faint); display: flex; flex-wrap: wrap; gap: 8px 20px; }
+      footer a { color: var(--muted); }
+      footer a:hover { color: var(--fg); }
+      @media (max-width: 620px) {
+        .wrap { width: min(940px, 100% - 28px); padding-top: 36px; }
+        .app { grid-template-columns: 56px 1fr; row-gap: 12px; }
+        .app img.icon { width: 56px; height: 56px; border-radius: 13px; }
+        .download { grid-column: 1 / -1; justify-self: start; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <img src="assets/source.png" alt="" />
+        <div class="brand">LinkPass Source<span>AltStore · SideStore · Feather</span></div>
+      </header>
+
+      <h1>把自己写的 App<br />装进 iPhone。</h1>
+      <p class="lede">
+        Kazumi、CarCanvas、AirBeep 的侧载源。加一次源，之后每次发版都能在侧载工具里直接更新。
+      </p>
+
+      <div class="actions">
+        <a class="btn primary" id="add-altstore" href="#"><span class="dot"></span>添加到 AltStore</a>
+        <a class="btn" id="add-sidestore" href="#" style="--accent:#a05cff"><span class="dot"></span>添加到 SideStore</a>
+        <a class="btn" id="add-feather" href="#" style="--accent:#7f8cff"><span class="dot"></span>添加到 Feather</a>
+      </div>
+
+      <div class="manual">
+        <code id="source-url">loading…</code>
+        <button id="copy-btn" type="button">复制</button>
+      </div>
+
+      <h2>应用</h2>
+      <div class="apps" id="apps">
+        <p class="empty">加载中…</p>
+      </div>
+
+      <footer>
+        <a href="source.json">source.json</a>
+        <a id="gh-link" href="https://github.com/LinkPass888/Sideload">仓库</a>
+        <span>所有 IPA 均为未签名包，需自备证书签名（7 天有效期，到期续签）。</span>
+      </footer>
+    </div>
+
+    <script>
+      (function () {
+        const base = location.href.replace(/[^/]*$/, "");
+        const sourceURL = new URL("source.json", base).href;
+        const encoded = encodeURIComponent(sourceURL);
+
+        document.getElementById("source-url").textContent = sourceURL;
+        document.getElementById("add-altstore").href = "altstore://source?url=" + encoded;
+        document.getElementById("add-sidestore").href = "sidestore://source?url=" + encoded;
+        document.getElementById("add-feather").href = "feather://source/" + sourceURL;
+
+        const gh = document.getElementById("gh-link");
+        fetch("source.json")
+          .then((r) => r.json())
+          .then((s) => {
+            if (s.website && /github\.com\/([^/]+)\/([^/?#]+)/.test(s.website)) {
+              gh.href = "https://github.com/" + RegExp.$1 + "/" + RegExp.$2;
+            }
+            return s;
+          })
+          .catch(() => null);
+
+        const copy = document.getElementById("copy-btn");
+        copy.addEventListener("click", async function () {
+          try {
+            await navigator.clipboard.writeText(sourceURL);
+            copy.textContent = "已复制";
+          } catch {
+            copy.textContent = "复制失败";
+          }
+          setTimeout(() => (copy.textContent = "复制"), 1600);
+        });
+
+        function formatSize(bytes) {
+          if (!bytes) return "";
+          const mb = bytes / 1048576;
+          return mb >= 1 ? mb.toFixed(1) + " MB" : Math.round(bytes / 1024) + " KB";
+        }
+
+        function formatDate(iso) {
+          if (!iso) return "";
+          const d = new Date(iso);
+          return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+        }
+
+        function escapeHTML(s) {
+          return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+        }
+
+        // source.json points at the published CDN; the page is served from the
+        // same site, so use the sibling copy of each icon instead.
+        function localIcon(iconURL) {
+          const name = String(iconURL || "").split("/").pop();
+          return name ? "assets/apps/" + name : "";
+        }
+
+        fetch("source.json")
+          .then((r) => r.json())
+          .then((source) => {
+            const host = document.getElementById("apps");
+            if (!source.apps || !source.apps.length) {
+              host.innerHTML = '<p class="empty">源里还没有应用。</p>';
+              return;
+            }
+            const apps = source.apps.slice().sort((a, b) => {
+              const fa = (source.featuredApps || []).indexOf(a.bundleIdentifier);
+              const fb = (source.featuredApps || []).indexOf(b.bundleIdentifier);
+              return (fa < 0 ? 999 : fa) - (fb < 0 ? 999 : fb);
+            });
+            host.innerHTML = apps
+              .map(function (app) {
+                const latest = (app.versions || [])[0] || {};
+                const meta = [
+                  latest.version ? "v" + latest.version : null,
+                  formatSize(latest.size),
+                  formatDate(latest.date),
+                ].filter(Boolean).join(" · ");
+                const link = latest.downloadURL
+                  ? '<a class="download" href="' + escapeHTML(latest.downloadURL) + '">下载 IPA</a>'
+                  : '<span class="download">暂无发布</span>';
+                return (
+                  '<article class="app">' +
+                  '<img class="icon" src="' + escapeHTML(localIcon(app.iconURL)) + '" alt="" loading="lazy" />' +
+                  "<div>" +
+                  "<h3>" + escapeHTML(app.name) + "</h3>" +
+                  '<p class="sub">' + escapeHTML(app.subtitle || "") + "</p>" +
+                  (meta ? '<p class="meta">' + escapeHTML(meta) + "</p>" : "") +
+                  "</div>" + link +
+                  "</article>"
+                );
+              })
+              .join("");
+          })
+          .catch(() => {
+            document.getElementById("apps").innerHTML = '<p class="empty">读取 source.json 失败。</p>';
+          });
+      })();
+    </script>
+  </body>
+</html>
