@@ -34,27 +34,33 @@ GITHUB_TOKEN=… node scripts/sync-source.mjs
 GitHub Actions 每 10 分钟跑一次；检测到新版本会提交 `source.json`，
 Pages 直接从 `main` 分支根目录发布。
 
-## 让更新立刻生效
+## 更新延迟
 
-定时轮询有延迟，而且 GitHub 在高负载时会推迟 scheduled run。要几乎实时，
-让上游的发布 workflow 在打完 Release 后直接通知本仓库。
+| 路径 | 延迟 | 状态 |
+| --- | --- | --- |
+| Kazumi-Swift / CarCanvas 发布后 dispatch | 约 1 分钟 | 已接入，待配 `SIDELOAD_TOKEN` |
+| AirBeep 发布后 dispatch | — | 不可用，见下 |
+| 定时轮询 | 最长 10 分钟 | 一直生效，是主要兜底 |
 
-1. 建一个 fine-grained PAT，权限只需 **Contents: Read and write**，仓库选本仓库。
-2. 在本仓库 Settings → Secrets 里存成 `DISPATCH_TOKEN`。
-3. 在上游仓库（Kazumi-Swift / CarCanvas / AirBeep）发布成功的 job 末尾加一步：
+同步 workflow 本身监听 `repository_dispatch`（`upstream-release`），
+上游发布 job 末尾调用一次即可。那段 yaml 已经加在
+`Kazumi-Swift/.github/workflows/release.yaml` 和
+`CarCanvas/.github/workflows/build-ipa.yml` 的 release job 末尾。
 
-```yaml
-      - name: Notify sideload source
-        if: success()
-        run: |
-          curl -fsSL -X POST \
-            -H "Authorization: Bearer ${{ secrets.SIDELOAD_TOKEN }}" \
-            -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/LinkPass888/Sideload/dispatches \
-            -d '{"event_type":"upstream-release"}'
-```
+**AirBeep 无法接入**：`LinkPass888/AirBeep` 是 `frs0n/placard` 的 fork 且已归档（archived），
+归档仓库的 workflow 不能修改。所以 AirBeep 只能靠定时轮询，最长 10 分钟。
+如果以后要接，得先取消归档，或者在本仓库里改用「观察 AirBeep release 时间」的方式主动拉取。
 
-上游的 `SIDELOAD_TOKEN` 就是第 1 步那个 PAT。加完这一步，发版后约 1 分钟源就会更新。
+### 待配置
+
+`SIDELOAD_TOKEN` 需同时存在于 Kazumi-Swift 和 CarCanvas 两个仓库的
+Settings → Secrets and variables → Actions 里。同一个 fine-grained PAT：
+
+- Repository access：只勾 `LinkPass888/Sideload`
+- Permissions：`Contents: Read and write`，其余 No access
+
+三个仓库内置的 `GITHUB_TOKEN` **不能跨仓库使用**，所以必须用 PAT。
+这一步是 best effort（`continue-on-error: true`），没配也不影响发布，只是退回轮询。
 
 ## 本地预览
 
