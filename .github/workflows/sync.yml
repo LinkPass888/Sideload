@@ -1,8 +1,14 @@
 name: Sync AltSource
 
 on:
+  # Safety net: poll upstream Releases. GitHub may delay scheduled runs under
+  # load, so this is the worst case rather than the typical latency.
   schedule:
-    - cron: "0 */12 * * *"
+    - cron: "*/10 * * * *"
+  # Instant path: an upstream release workflow can POST a repository_dispatch
+  # to this repo. See README for the one-time token setup.
+  repository_dispatch:
+    types: [upstream-release]
   workflow_dispatch:
   push:
     branches:
